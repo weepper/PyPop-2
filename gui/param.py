@@ -1,12 +1,14 @@
-from PyQt5.QtCore import *
-from PyQt5.QtWidgets import *
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QVBoxLayout, QLabel, QDialogButtonBox, QHBoxLayout, QLineEdit, QSlider, QWidget
 from app.setting import settings
+from gui.widgets import sliderInd, textInput
 
 class paramWindow(QWidget):
     def __init__(self, screen):
         super().__init__()
 
         self.move(int(screen[0] * 0.5) - self.rect().center().x(), int(screen[1] * 0.5) - self.rect().center().y())
+        self.setMinimumWidth(800)
         self.init_ui()
         self.signal_connect()
         #self.setStyleSheet("background-color: #33343b; color: #AAAAAA")
@@ -43,25 +45,21 @@ class paramWindow(QWidget):
         ##############################################################
 
         self.setting = settings()
-        formLayout = QFormLayout()
-        for path, alias, value, inputMode in self.setting.getValue():
-            if inputMode == 'text':
-                inp = QLineEdit()
-                inp.setText(value)
-            elif inputMode == 'slider':
-                inp = QSlider(Qt.Horizontal)
-                inp.setMinimum(10)
-                inp.setMaximum(500)
-                inp.setValue(int(value))
-            inp.setObjectName(path)
-            formLayout.addRow(alias, inp)
+        vLayout = QVBoxLayout()
 
+        for param in self.setting.getValue():
+            if param['input_type'] == 'text':
+                setting = textInput(param['value'], param['path'], param['alias'])
+            elif param['input_type'] == 'slider':
+                setting = sliderInd(value=param['value'],path=param['path'], alias=param['alias'])
+
+            vLayout.addLayout(setting)
         ##############################################################
                                 #Add Layout#
         ##############################################################
 
         layout.addWidget(self.label)
-        layout.addLayout(formLayout)
+        layout.addLayout(vLayout)
         layout.addWidget(self.buttonConclude)
         self.setLayout(layout)
 
@@ -80,5 +78,5 @@ class paramWindow(QWidget):
         self.setting.sync()
     
     def cancel(self):
-        print('cancel')
+
         self.close()

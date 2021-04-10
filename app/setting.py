@@ -6,14 +6,14 @@ class settings(QtCore.QSettings):
         super().__init__('WipCorp', 'PyPop')
         self.getValue()
 
-    def pictureHeight(self, height = None):
-        if not height:
-            if self.value("picture/height"):
-                height = self.value("picture/height")
-            else:
-                height = 100
-        self.setValue('picture/height', height)
-        return height
+    #def pictureHeight(self, height = None):
+    #    if not height:
+    #        if self.value("picture/height"):
+    #            height = self.value("picture/height")
+    #        else:
+    #            height = 100
+    #    self.setValue('picture/height', height)
+    #    return height
 
     def pictureWidth(self, width = None):
         if not width:
@@ -35,9 +35,9 @@ class settings(QtCore.QSettings):
     
     def getValue(self):
         val = []
-        val.append(['link/yts', 'Lien vers api yts', self.ytsLink(), 'text'])
-        val.append(['picture/height', 'Height of the picture', self.pictureHeight(), 'slider'])
-        val.append(['picture/width', 'Width of the picture', self.pictureWidth(), 'slider'])
+        val.append({'path': 'link/yts', 'alias': 'Lien vers api yts', 'value': self.ytsLink(), 'input_type': 'text'})
+        #val.append(['picture/height', 'Height of the picture', self.pictureHeight(), 'slider'])
+        val.append({'path': 'picture/width', 'alias': 'Width of the picture', 'value': self.pictureWidth(), 'input_type': 'slider'})
         return val
 
 

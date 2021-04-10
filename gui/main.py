@@ -1,6 +1,6 @@
 import sys
 import json
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QMainWindow, QMenu
 
 from gui.param import paramWindow
 #from app import setting
@@ -11,7 +11,7 @@ class mainWindow(QMainWindow):
 
         self.paramW = None
         self.screen = [app.primaryScreen().size().width(), app.primaryScreen().size().height()]
-        self.setStyleSheet("background-color: #33343b; color: #AAAAAA")
+        #self.setStyleSheet("background-color: #33343b; color: #AAAAAA")
         self.setWindowTitle("PyPop")
         self.resize(int(self.screen[0] * 0.7), int(self.screen[1] * 0.7))
 
