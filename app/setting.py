@@ -35,9 +35,9 @@ class settings(QtCore.QSettings):
     
     def getValue(self):
         val = []
-        val.append(['link/yts', 'Lien vers api yts', self.ytsLink()])
-        val.append(['picture/height', 'Height of the picture', self.pictureHeight()])
-        val.append(['picture/width', 'Width of the picture', self.pictureWidth()])
+        val.append(['link/yts', 'Lien vers api yts', self.ytsLink(), 'text'])
+        val.append(['picture/height', 'Height of the picture', self.pictureHeight(), 'slider'])
+        val.append(['picture/width', 'Width of the picture', self.pictureWidth(), 'slider'])
         return val
 
 
