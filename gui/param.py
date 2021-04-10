@@ -42,13 +42,19 @@ class paramWindow(QWidget):
                                 #Form#
         ##############################################################
 
-        setting = settings()
+        self.setting = settings()
         formLayout = QFormLayout()
-        for path, alias, value in setting.getValue():
-            inputText = QLineEdit()
-            inputText.setObjectName(path)
-            inputText.setText(value)
-            formLayout.addRow(alias, inputText)
+        for path, alias, value, inputMode in self.setting.getValue():
+            if inputMode == 'text':
+                inp = QLineEdit()
+                inp.setText(value)
+            elif inputMode == 'slider':
+                inp = QSlider(Qt.Horizontal)
+                inp.setMinimum(10)
+                inp.setMaximum(500)
+                inp.setValue(int(value))
+            inp.setObjectName(path)
+            formLayout.addRow(alias, inp)
 
         ##############################################################
                                 #Add Layout#
@@ -65,10 +71,13 @@ class paramWindow(QWidget):
         self.buttonConclude.rejected.connect(self.cancel)
 
     def save(self):
-        print('nice')
+        for param in self.children():
+            if type(param) == QLineEdit:
+                self.setting.setValue(param.objectName(), param.text())
+            elif type(param) == QSlider:
+                self.setting.setValue(param.objectName(), param.value())
 
-        tmp = self.findChild(QLineEdit, "link/yts")
-        print(tmp.text())
+        self.setting.sync()
     
     def cancel(self):
         print('cancel')
