@@ -45,13 +45,14 @@ class paramWindow(QWidget):
         ##############################################################
 
         self.setting = settings()
+        value = self.setting.getValue()
         vLayout = QVBoxLayout()
 
-        for param in self.setting.getValue():
-            if param['input_type'] == 'text':
-                setting = textInput(param['value'], param['path'], param['alias'])
-            elif param['input_type'] == 'slider':
-                setting = sliderInd(value=param['value'],path=param['path'], alias=param['alias'])
+        for param in value:
+            if value[param]['input_type'] == 'text':
+                setting = textInput(value=value[param]['value'],  path=param,  alias=value[param]['alias'])
+            elif value[param]['input_type'] == 'slider':
+                setting = sliderInd(value=value[param]['value'], path=param, alias=value[param]['alias'], min=value[param]['min'], max=value[param]['max'])
 
             vLayout.addLayout(setting)
         ##############################################################

@@ -1,5 +1,8 @@
-from PyQt5.QtWidgets import QSlider, QLabel, QSizePolicy, QHBoxLayout, QLineEdit, QLayout, QWidget
+from PyQt5.QtWidgets import QSlider, QLabel, QSizePolicy, QHBoxLayout, QLineEdit, QLayout, QWidget, QPushButton, QSizePolicy, QGridLayout
 from PyQt5.QtCore import QPoint, QRect, QSize, Qt
+from PyQt5.QtGui import QPixmap, QColor, QPainter, QBrush
+
+from app.setting import settings
 
 class sliderInd(QHBoxLayout):
     def __init__(self, min = 0, max = 100, value = 0, path = '', alias = ''):
@@ -135,3 +138,53 @@ class FlowLayout(QLayout):
         widget = QWidget()
         widget.setLayout(self)
         return widget
+
+class roundedPicture(QLabel):
+    def __init__(self, picture, height, radius = 10, margin = 0):
+        super(roundedPicture, self).__init__()
+        self.pixmap = QPixmap(picture).scaledToHeight(int(height))
+        self.setSizePolicy(QSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored))
+
+        # create empty pixmap of same size as original 
+        self.rounded = QPixmap(self.pixmap.size())
+        self.rounded.fill(QColor("transparent"))
+        
+
+        # draw rounded rect on new pixmap using original pixmap as brush
+        self.painter = QPainter(self.rounded)
+        self.painter.setRenderHint(QPainter.Antialiasing)
+        self.painter.setBrush(QBrush(self.pixmap))
+        self.painter.setPen(Qt.NoPen)
+        self.painter.drawRoundedRect(self.pixmap.rect(), radius, radius)
+
+        # set pixmap of label
+        self.setPixmap(self.rounded)
+        self.setMargin(margin)
+        self.painter.end()
+
+class previewWidget(QWidget):
+    def __init__(self):
+        super(previewWidget, self).__init__()
+
+        setting = settings()
+        param = setting.getValue()
+        width = int(param['preview/width']['value'])
+
+        Layout = QGridLayout(self)
+
+        self.previewPicture = roundedPicture('img/background.jpg', width * 0.35)
+        self.previewPicture.setAlignment(Qt.AlignHCenter | Qt.AlignBottom)
+        Layout.addWidget(self.previewPicture, 0, 0)
+        
+        self.previewPicture = roundedPicture('img/large-cover.jpg', width * 0.3)
+        self.previewPicture.setContentsMargins(width * 0.1,0,0,0)
+        self.previewPicture.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+        Layout.addWidget(self.previewPicture, 0, 0)
+        
+        self.previewTitle = QLabel('Grimmel')
+        self.previewTitle.setMaximumWidth(width * 0.65)
+        self.previewTitle.setAlignment(Qt.AlignRight | Qt.AlignTop)
+        Layout.addWidget(self.previewTitle, 0, 0)
+        
+        self.setLayout(Layout)
+        self.setFixedSize(width, width * 0.5)

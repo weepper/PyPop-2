@@ -15,13 +15,13 @@ class settings(QtCore.QSettings):
     #    self.setValue('picture/height', height)
     #    return height
 
-    def pictureWidth(self, width = None):
+    def previewWidth(self, width = None):
         if not width:
-            if self.value("picture/width"):
-                width = self.value("picture/width")
+            if self.value("preview/width"):
+                width = self.value("preview/width")
             else:
                 width = 50
-        self.setValue('picture/width', width)
+        self.setValue('preview/width', width)
         return width
 
     def ytsLink(self, link = None):
@@ -34,10 +34,10 @@ class settings(QtCore.QSettings):
         return link
     
     def getValue(self):
-        val = []
-        val.append({'path': 'link/yts', 'alias': 'Lien vers api yts', 'value': self.ytsLink(), 'input_type': 'text'})
+        val = {}
+        val['link/yts'] = {'alias': 'Lien vers api yts', 'value': self.ytsLink(), 'input_type': 'text'}
         #val.append(['picture/height', 'Height of the picture', self.pictureHeight(), 'slider'])
-        val.append({'path': 'picture/width', 'alias': 'Width of the picture', 'value': self.pictureWidth(), 'input_type': 'slider'})
+        val['preview/width'] = {'alias': 'Width of the preview', 'value': self.previewWidth(), 'input_type': 'slider', 'min': 50, 'max': 500}
         return val
 
 
